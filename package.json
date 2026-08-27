@@ -1,0 +1,17 @@
+{
+  "name": "lec1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "@tailwindcss -i ./css/input.css -o ./css/style.css --watch",
+    "build": "@tailwindcss -i ./css/input.css -o ./src/style.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3"
+  }
+}
