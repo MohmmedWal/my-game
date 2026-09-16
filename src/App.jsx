@@ -18,9 +18,12 @@ const App = () => {
   const [form, setForm] = useState(emptyForm);
   const [loding, setLoding] = useState(true);
   const [isEdiet, setIsEdiet] = useState(false);
+  const [isAddClicked, setIsAddClicked] = useState(false);
+  const [isEditClicked, setIsEditClicked] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "light";
   });
+
 
   useEffect((() => {
     const root = window.document.documentElement;
@@ -67,14 +70,25 @@ const App = () => {
 
   const handleAdd = async (event) => {
     event.preventDefault();
-    await addDoc(collection(db, "courses"), form);
-    setForm(emptyForm);
-    setIsModalOpen(false);
-    getRecords();
-    toast.success("Course added successfully");
+    setIsAddClicked(true);
+
+    try {
+      await addDoc(collection(db, "courses"), form);
+      setForm(emptyForm);
+      setIsModalOpen(false);
+      getRecords();
+      toast.success("Course added successfully");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error adding course");
+    } finally {
+      setIsAddClicked(false);
+    }
   };
 
+
   const handleEdit = async (event) => {
+    setIsEditClicked(true);
     event.preventDefault();
 
     try {
@@ -99,6 +113,7 @@ const App = () => {
       console.log(err);
       toast.error("Failed to update course");
     }
+    finally { setIsEditClicked(false); }
   };
 
   const handleDelete = async (id) => {
@@ -392,12 +407,15 @@ const App = () => {
                     >
                       Cancel
                     </button>
-
                     <button
                       type="submit"
-                      className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 cursor-pointer"
+                      disabled={isAddClicked}
+                      className={`rounded-xl px-5 py-3 font-semibold text-white transition-colors ${isAddClicked
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer'
+                        }`}
                     >
-                      Add Course
+                      {isAddClicked ? 'Adding...' : 'Add Course'}
                     </button>
 
                   </div>
@@ -471,9 +489,14 @@ const App = () => {
 
                       <button
                         type="submit"
-                        className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+                        disabled={isEditClicked}
+                        className={`rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 ${isEditClicked}
+                          ? 'bg-gray-400 cursor-not-allowed' 
+                          : 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer'
+                            `}
                       >
-                        Edit Course
+
+                        {isEditClicked ? 'Editing...' : 'Edit Course'}
                       </button>
 
                     </div>
@@ -489,7 +512,7 @@ const App = () => {
           </div>
         )}
 
-      </main>
+      </main >
     </>
   );
 };
