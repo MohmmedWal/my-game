@@ -138,7 +138,10 @@ const App = () => {
     <>
       <Toaster />
 
-      <main className="min-h-screen bg-slate-50 p-4 sm:p-8 dark:bg-slate-900">
+      <main className="min-h-screen bg-slate-50 p-4 sm:p-8 dark:bg-slate-900"
+        onClick={() => {
+          isModalOpen && setIsModalOpen(false)
+        }}>
         <div className="mx-auto max-w-7xl">
 
           <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -328,9 +331,14 @@ const App = () => {
         </div>
 
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4"
+          >
 
-            <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900 dark:shadow-black/50">
+            <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900 dark:shadow-black/50" onClick={(e) => {
+              e.stopPropagation();
+            }}
+
+            >
 
               <div className="mb-6 flex items-start justify-between">
 
